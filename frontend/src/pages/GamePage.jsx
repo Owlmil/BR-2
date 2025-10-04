@@ -1,5 +1,6 @@
 import React from 'react';
 import PhaserGame from '../components/PhaserGame';
+import MatchFourGame from './MatchGame';
 
 export default function GamePage(){
   return (
@@ -8,6 +9,7 @@ export default function GamePage(){
         <h2 className="text-white text-2xl mb-2">Phaser 2D Game Demo</h2>
         <div className="bg-black p-2 rounded">
           <PhaserGame width={800} height={560} />
+          <MatchFourGame />
         </div>
       </div>
     </div>
