@@ -1,0 +1,54 @@
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(25, 4, 4, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .loading-overlay.hidden {
+    opacity: 0;
+  }
+  
+  .canoe-container {
+    text-align: center;
+  }
+  
+  .canoe {
+    width: 200px; /* Increased size for better visibility */
+    height: auto;
+    animation: row-boat 3s ease-in-out infinite;
+  }
+  
+  .loading-text {
+    color: white;
+    margin-top: 20px;
+    font-size: 1.2em;
+  }
+  
+  /* A more complex animation to simulate rowing */
+  @keyframes row-boat {
+    0% {
+      transform: translateX(-150px) rotate(0deg);
+    }
+    25% {
+      transform: translateX(-75px) rotate(-5deg);
+    }
+    50% {
+      transform: translateX(0px) rotate(0deg);
+    }
+    75% {
+      transform: translateX(75px) rotate(5deg);
+    }
+    100% {
+      transform: translateX(150px) rotate(0deg);
+    }
+  }
+  
