@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ if using React Router
 
 import straw1 from "../phaser/assets/strawberry/strawberry1.png";
 import straw2 from "../phaser/assets/strawberry/strawberry2.png";
@@ -28,14 +29,16 @@ const imageMap = {
 };
 
 export default function GroceriesGame() {
+  const navigate = useNavigate(); // ✅ navigation hook
+
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState("");
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showGameOver, setShowGameOver] = useState(false); // ✅ modal control
 
-  // Fetch grocery-related words from backend
   useEffect(() => {
     const fetchGroceries = async () => {
       try {
@@ -43,15 +46,12 @@ export default function GroceriesGame() {
         const allWords = await res.json();
         if (!allWords.length) return;
 
-        // Filter by 'groceries' category
         const groceryWords = allWords.filter(word =>
           word.category?.toLowerCase().includes("groceries")
         );
         if (!groceryWords.length) return;
 
-        // Build question objects dynamically
         const questionSet = groceryWords.map(word => {
-          // Pick 3 random distractors
           const others = allWords.filter(w => w.sen_word !== word.sen_word);
           const distractors = [];
           while (distractors.length < 3 && others.length > 0) {
@@ -61,11 +61,8 @@ export default function GroceriesGame() {
           }
 
           const options = [word.sen_word, ...distractors].sort(() => Math.random() - 0.5);
-
-          // Map word name to known image sets (fallback if not found)
           const name = word.english_meaning?.toLowerCase() || "";
-          const images =
-            imageMap[name] || [straw1, straw2, straw3, straw4]; // default fallback
+          const images = imageMap[name] || [straw1, straw2, straw3, straw4];
 
           return {
             id: word.id,
@@ -108,11 +105,23 @@ export default function GroceriesGame() {
       setFeedback("");
       setSelectedOption("");
     } else {
-      alert(`🎉 Game Over! Final Score: ${score + 10}`);
+      setShowGameOver(true); // ✅ show popup instead of alert
     }
   };
 
   const handleSkip = () => handleNext();
+
+  const handlePlayAgain = () => {
+    setScore(0);
+    setCurrentIndex(0);
+    setFeedback("");
+    setSelectedOption("");
+    setShowGameOver(false);
+  };
+
+  const handleGoBack = () => {
+    navigate("/"); // ✅ change this to your map route
+  };
 
   if (loading) {
     return (
@@ -196,6 +205,30 @@ export default function GroceriesGame() {
       >
         Skip
       </button>
+
+      {/* ✅ Game Over Modal */}
+      {showGameOver && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-xl p-8 text-center w-80">
+            <h2 className="text-2xl font-bold text-emerald-700 mb-4">🎉 Game Over!</h2>
+            <p className="text-gray-700 mb-6">Your final score is {score}!</p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={handlePlayAgain}
+                className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 rounded-lg transition-all"
+              >
+                Play Again
+              </button>
+              <button
+                onClick={handleGoBack}
+                className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 rounded-lg transition-all"
+              >
+                Go Back to Map
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
