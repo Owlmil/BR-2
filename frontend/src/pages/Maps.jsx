@@ -6,6 +6,7 @@ import grocery from "../phaser/assets/fairway.jpg";
 import forest from "../phaser/assets/forest.jpg";
 import ocean from "../phaser/assets/ocean.jpg";
 import "leaflet/dist/leaflet.css";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 // Google Maps-style pin
@@ -58,9 +59,18 @@ export default function Map() {
 
     return (
         <div className="h-[80vh] w-full rounded-xl shadow-lg border-4 border-indigo-300 overflow-hidden">
-            <h2 className="font-bold text-2xl text-indigo-700 mb-4 text-center">
-                🌟 Explore Brentwood Bay! 🌟
-            </h2>
+               {/* 🌈 Header */}
+      <motion.div
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="h-[10vh] flex flex-col justify-center items-center bg-gradient-to-r from-sky-200 via-indigo-200 to-purple-200 shadow-md"
+      >
+        <h2 className="font-bold text-3xl text-indigo-800 drop-shadow-md">
+          🌊 Explore Brentwood Bay! 🌊
+        </h2>
+       
+      </motion.div>
             <MapContainer center={center} zoom={13} style={{ height: "100%", width: "100%" }}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
