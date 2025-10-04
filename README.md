@@ -36,10 +36,11 @@ A web-based interactive map featuring multiple points of interest that direct pl
 
 ## 📂 Project Structure
 /src
-├─ /assets # Images, sprites, and background assets /n
-├─ /components # Reusable UI components (LoadingScreen, Map, etc.) /n
-├─ /pages # Game pages /n
-└─ App.jsx # Main application entry /n
+├─ /assets       # Images, sprites, and background assets
+├─ /components   # Reusable UI components (LoadingScreen, Map, etc.)
+├─ /pages        # Game pages
+└─ App.jsx       # Main application entry
+
 
 
 ---
@@ -62,10 +63,10 @@ A web-based interactive map featuring multiple points of interest that direct pl
    ````
 
 4. Start the frontend
-  ```bash
-  cd ../
-  npm start
-  ```
+    ```bash
+    cd ../
+    npm start
+    ```
 
 5. Open http://localhost:5173 in your browser and explore the map!
 
