@@ -35,12 +35,11 @@ A web-based interactive map featuring multiple points of interest that direct pl
 ---
 
 ## 📂 Project Structure
-
 /src
-├─ /assets # Images, sprites, and background assets
-├─ /components # Reusable UI components (LoadingScreen, Map, etc.)
-├─ /pages # Game pages
-└─ App.jsx # Main application entry
+├─ /assets # Images, sprites, and background assets /n
+├─ /components # Reusable UI components (LoadingScreen, Map, etc.) /n
+├─ /pages # Game pages /n
+└─ App.jsx # Main application entry /n
 
 
 ---
@@ -52,21 +51,21 @@ A web-based interactive map featuring multiple points of interest that direct pl
    git clone https://github.com/yourusername/adventure-map-game.git
    cd frontend
 2. Install dependencies:
- ```bash
-    npm install
-```
+   ```bash
+      npm install
+   ```
 
 3. Start the backend:
-  ```bash
- cd backend
- npm start
- ````
+   ```bash
+   cd backend
+   npm start
+   ````
 
 4. Start the frontend
-```bash
-cd ../
-npm start
-```
+  ```bash
+  cd ../
+  npm start
+  ```
 
 5. Open http://localhost:5173 in your browser and explore the map!
 
