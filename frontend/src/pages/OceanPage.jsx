@@ -13,6 +13,8 @@ export default function CanoeRaceGame() {
   const [scores, setScores] = useState({ A: 0, B: 0 });
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
+  const [feedback, setFeedback] = useState(null); // 'Correct!' or 'Wrong!'
+
 
   const teamACanoeRef = useRef(null);
   const teamBCanoeRef = useRef(null);
@@ -121,9 +123,14 @@ export default function CanoeRaceGame() {
   const handleAnswer = async (team, isCorrect) => {
     if (gameOver) return;
     if (isCorrect) {
+      setFeedback("correct");
       moveCanoe(team);
       setScores(prev => ({ ...prev, [team]: prev[team] + 1 }));
     }
+    else {
+      setFeedback("wrong");
+    }
+
     setTeamTurn(team === "A" ? "B" : "A");
     await fetchQuestion();
   };
@@ -155,6 +162,8 @@ export default function CanoeRaceGame() {
           <p className="mb-2 text-center">
             What is the SENĆOŦEN word for <strong>{currentQ.english_meaning}</strong>?
           </p>
+         
+
           <div className="flex flex-wrap justify-center gap-3">
             {currentQ.options.map((opt, idx) => (
               <button
@@ -165,9 +174,23 @@ export default function CanoeRaceGame() {
                 {opt}
               </button>
             ))}
+
+          
           </div>
           <p className="mt-2 text-center">Scores - Team A: {scores.A} | Team B: {scores.B}</p>
+             {/* Feedback */}
+            {feedback && (
+              <div
+                className={`px-6 py-3 mb-4 rounded-lg text-white font-semibold shadow-lg text-center ${feedback === "correct" ? "bg-green-500" : "bg-red-500"
+                  }`}
+              >
+                {feedback === "correct"
+                  ? `✅ Correct!`
+                  : "❌ Wrong Answer!"}
+              </div>
+            )}
         </div>
+        
       )}
 
       {/* Game Over Screen */}
