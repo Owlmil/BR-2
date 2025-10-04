@@ -35,11 +35,14 @@ A web-based interactive map featuring multiple points of interest that direct pl
 ---
 
 ## 📂 Project Structure
+
+```plaintext
 /src
 ├─ /assets       # Images, sprites, and background assets
 ├─ /components   # Reusable UI components (LoadingScreen, Map, etc.)
 ├─ /pages        # Game pages
 └─ App.jsx       # Main application entry
+```
 
 
 
