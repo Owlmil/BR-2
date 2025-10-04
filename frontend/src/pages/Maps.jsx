@@ -30,6 +30,9 @@ export default function Map() {
 
   return (
     <div className="h-[80vh] w-full rounded-xl shadow-lg border-4 border-indigo-300">
+         <h2 className="font-bold text-2xl text-indigo-700 mb-4 text-center">
+        🌟 Explore Brentwood Bay! 🌟
+      </h2>
       <MapContainer center={center} zoom={13} style={{ height: "100%", width: "100%" }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
