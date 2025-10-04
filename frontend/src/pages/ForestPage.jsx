@@ -196,7 +196,7 @@ export default function WordSearch() {
             style={{ backgroundImage: `url(${forestImg})` }}
         >
             {/* Main Game Container */}
-            <div className="bg-white/95 rounded-3xl shadow-2xl w-[85vw] h-[85vh] flex flex-col items-center p-6 relative overflow-hidden border-0">
+            <div className="bg-white/60 rounded-3xl shadow-2xl w-[80vw] h-[80vh] flex flex-col items-center p-6 relative overflow-hidden border-0">
                 <h1 className="text-4xl font-extrabold mb-2 text-gray-800 text-center">
                     Word Search
                 </h1>
