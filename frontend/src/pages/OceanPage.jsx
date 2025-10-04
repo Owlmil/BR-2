@@ -7,52 +7,42 @@ import river from "../phaser/assets/river.png";
 export default function CanoeRaceGame() {
   const gameRef = useRef(null);
   const gameInstanceRef = useRef(null);
+  const [gameReady, setGameReady] = useState(false); // ✅ New
   const [currentQ, setCurrentQ] = useState(null);
   const [teamTurn, setTeamTurn] = useState("A");
   const [scores, setScores] = useState({ A: 0, B: 0 });
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
 
-  // Phaser sprite refs
   const teamACanoeRef = useRef(null);
   const teamBCanoeRef = useRef(null);
 
-  // Fetch question and generate options
   const fetchQuestion = async () => {
-  try {
-    const res = await fetch("http://localhost:5000/words");
-    const allWords = await res.json();
-    if (!allWords.length) return;
+    try {
+      const res = await fetch("http://localhost:5000/words");
+      const allWords = await res.json();
+      if (!allWords.length) return;
 
-    // Filter words that have the 'ocean' tag
-    const oceanWords = allWords.filter(word => word.category?.includes("Ocean"));
-    if (!oceanWords.length) return;
+      const oceanWords = allWords.filter(word => word.category?.includes("Ocean"));
+      if (!oceanWords.length) return;
 
-    // Pick a random ocean-related word
-    const questionWord = oceanWords[Math.floor(Math.random() * oceanWords.length)];
+      const questionWord = oceanWords[Math.floor(Math.random() * oceanWords.length)];
+      const filtered = allWords.filter(w => w.sen_word !== questionWord.sen_word);
 
-    // Pick 3 random SENĆOŦEN words as distractors (exclude the correct one)
-    let distractors = [];
-    const filtered = allWords.filter(w => w.sen_word !== questionWord.sen_word);
-    while (distractors.length < 3 && filtered.length > 0) {
-      const idx = Math.floor(Math.random() * filtered.length);
-      distractors.push(filtered[idx].sen_word);
-      filtered.splice(idx, 1);
+      let distractors = [];
+      while (distractors.length < 3 && filtered.length > 0) {
+        const idx = Math.floor(Math.random() * filtered.length);
+        distractors.push(filtered[idx].sen_word);
+        filtered.splice(idx, 1);
+      }
+
+      const options = [questionWord.sen_word, ...distractors].sort(() => Math.random() - 0.5);
+      setCurrentQ({ ...questionWord, options });
+    } catch (err) {
+      console.error("Error fetching question:", err);
     }
+  };
 
-    const options = [questionWord.sen_word, ...distractors].sort(() => Math.random() - 0.5);
-    setCurrentQ({ ...questionWord, options });
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-
-  useEffect(() => {
-    fetchQuestion();
-  }, []);
-
-  // Initialize Phaser
   useEffect(() => {
     if (!gameRef.current || gameInstanceRef.current) return;
 
@@ -71,6 +61,9 @@ export default function CanoeRaceGame() {
         teamACanoeRef.current = this.add.sprite(width * 0.05, height * 0.3, "canoeA").setScale(0.15);
         teamBCanoeRef.current = this.add.sprite(width * 0.05, height * 0.6, "canoeB").setScale(0.15);
         this.add.image(width * 0.9, height / 2, "finish").setScale(0.25);
+
+        // ✅ Signal that game has loaded
+        setGameReady(true);
       },
     };
 
@@ -91,14 +84,19 @@ export default function CanoeRaceGame() {
         gameInstanceRef.current = null;
       }
     };
-  }, [gameRef.current]);
+  }, []);
 
-  // Move canoe with animation
+  // ✅ Fetch first question only after game is ready
+  useEffect(() => {
+    if (gameReady) {
+      fetchQuestion();
+    }
+  }, [gameReady]);
+
   const moveCanoe = (team) => {
     const step = window.innerWidth * 0.15;
     const finishX = window.innerWidth * 0.9;
     const target = team === "A" ? teamACanoeRef.current : teamBCanoeRef.current;
-
     if (!target) return;
 
     const startX = target.x;
@@ -117,7 +115,6 @@ export default function CanoeRaceGame() {
         setGameOver(true);
       }
     };
-
     requestAnimationFrame(animate);
   };
 
@@ -136,19 +133,23 @@ export default function CanoeRaceGame() {
     setTeamTurn("A");
     setGameOver(false);
     setWinner(null);
-    // Reset canoes to start
     if (teamACanoeRef.current) teamACanoeRef.current.x = window.innerWidth * 0.05;
     if (teamBCanoeRef.current) teamBCanoeRef.current.x = window.innerWidth * 0.05;
   };
-
-  if (!currentQ) return <div className="flex justify-center items-center h-screen">Loading...</div>;
 
   return (
     <div className="w-screen h-screen overflow-hidden relative">
       <div ref={gameRef} className="w-full h-full" />
 
+      {/* Loading Screen */}
+      {!gameReady && (
+        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-60 text-white text-2xl font-bold">
+          Loading Canoe Race...
+        </div>
+      )}
+
       {/* Question Panel */}
-      {!gameOver && (
+      {gameReady && currentQ && !gameOver && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 p-4 bg-blue-100/70 rounded max-w-3xl w-[90%]">
           <h2 className="font-bold text-lg mb-2 text-center">Question for Team {teamTurn} 📝</h2>
           <p className="mb-2 text-center">
