@@ -173,10 +173,13 @@ export default function WordSearch() {
             setFoundPaths([...foundPaths, ...currentSelection]);
             setLastFoundWord(matched);
 
+            // Delay gameOver check until after player closes popup
             if (updatedFound.length === WORDS.length) {
-                setGameOver(true);
+                // Mark it as "ready for game over" but don’t show yet
+                setTimeout(() => setGameOver(true), 600);
             }
         }
+
 
         setIsDragging(false);
         setStartCell(null);
@@ -210,11 +213,10 @@ export default function WordSearch() {
                         {WORDS.slice(0, Math.ceil(WORDS.length / 2)).map(word => (
                             <div
                                 key={word}
-                                className={`text-center font-semibold text-sm py-2 px-3 rounded-md border border-gray-200 shadow-sm transition-all ${
-                                    foundWords.includes(word)
+                                className={`text-center font-semibold text-sm py-2 px-3 rounded-md border border-gray-200 shadow-sm transition-all ${foundWords.includes(word)
                                         ? "text-gray-400 line-through bg-gray-50"
                                         : "text-gray-800 bg-white"
-                                }`}
+                                    }`}
                             >
                                 {word}
                             </div>
@@ -259,11 +261,10 @@ export default function WordSearch() {
                         {WORDS.slice(Math.ceil(WORDS.length / 2)).map(word => (
                             <div
                                 key={word}
-                                className={`text-center font-semibold text-sm py-2 px-3 rounded-md border border-gray-200 shadow-sm transition-all ${
-                                    foundWords.includes(word)
+                                className={`text-center font-semibold text-sm py-2 px-3 rounded-md border border-gray-200 shadow-sm transition-all ${foundWords.includes(word)
                                         ? "text-gray-400 line-through bg-gray-50"
                                         : "text-gray-800 bg-white"
-                                }`}
+                                    }`}
                             >
                                 {word}
                             </div>
