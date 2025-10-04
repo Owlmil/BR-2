@@ -19,26 +19,34 @@ export default function CanoeRaceGame() {
 
   // Fetch question and generate options
   const fetchQuestion = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/words");
-      const allWords = await res.json();
-      if (!allWords.length) return;
+  try {
+    const res = await fetch("http://localhost:5000/words");
+    const allWords = await res.json();
+    if (!allWords.length) return;
 
-      const questionWord = allWords[Math.floor(Math.random() * allWords.length)];
-      let distractors = [];
-      const filtered = allWords.filter(w => w.sen_word !== questionWord.sen_word);
-      while (distractors.length < 3 && filtered.length > 0) {
-        const idx = Math.floor(Math.random() * filtered.length);
-        distractors.push(filtered[idx].sen_word);
-        filtered.splice(idx, 1);
-      }
+    // Filter words that have the 'ocean' tag
+    const oceanWords = allWords.filter(word => word.category?.includes("Ocean"));
+    if (!oceanWords.length) return;
 
-      const options = [questionWord.sen_word, ...distractors].sort(() => Math.random() - 0.5);
-      setCurrentQ({ ...questionWord, options });
-    } catch (err) {
-      console.error(err);
+    // Pick a random ocean-related word
+    const questionWord = oceanWords[Math.floor(Math.random() * oceanWords.length)];
+
+    // Pick 3 random SENĆOŦEN words as distractors (exclude the correct one)
+    let distractors = [];
+    const filtered = allWords.filter(w => w.sen_word !== questionWord.sen_word);
+    while (distractors.length < 3 && filtered.length > 0) {
+      const idx = Math.floor(Math.random() * filtered.length);
+      distractors.push(filtered[idx].sen_word);
+      filtered.splice(idx, 1);
     }
-  };
+
+    const options = [questionWord.sen_word, ...distractors].sort(() => Math.random() - 0.5);
+    setCurrentQ({ ...questionWord, options });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   useEffect(() => {
     fetchQuestion();
