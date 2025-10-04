@@ -5,6 +5,7 @@ import BaysidePage from "./pages/BaysidePage";
 import GroceryPage from "./pages/GroceryPage";
 import ForestPage from "./pages/ForestPage";
 import OceanPage from "./pages/OceanPage";
+import HeadUp from "./components/HeadUp"; 
 
 export default function App() {
   return (
@@ -12,7 +13,7 @@ export default function App() {
       <main className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 p-6">
         <Routes>
           <Route path="/" element={<Map />} />
-          <Route path="/bayside" element={<BaysidePage />} />
+          <Route path="/bayside" element={<HeadUp />} />
           <Route path="/grocery" element={<GroceryPage />} />
           <Route path="/forest" element={<ForestPage />} />
           <Route path="/ocean" element={<OceanPage />} />
